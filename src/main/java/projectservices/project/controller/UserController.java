@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projectservices.project.model.User;
 import projectservices.project.repository.UserRepository;
+import projectservices.project.service.UserService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,15 +34,9 @@ public class UserController {
     @GetMapping("/api/user/reorder")
     public List<User> reorder()
     {
-        List<User> listUser = (List)userRepository.findAll();
-        Collections.sort(listUser, new Comparator<User>() {
-            @Override
-            public int compare(User u1, User u2)
-            {
-               return u1.getName().compareTo(u2.getName());
-            }
-        });
-        return listUser;
+        UserService userService = new UserService();
+        List<User> orderedUser = userService.reorder(userRepository);
+        return orderedUser;
     }
 
     @PostMapping(path = "/api/user/save")
