@@ -22,17 +22,10 @@ public class UserResource {
        return userService.oneUser(userRepository, id);
     }
 
-    @RequestMapping("/api/user")
-    public List<User> allUser()
+    @GetMapping( path = "/api/users")
+     public List<User> allUser(@RequestParam("reorder") Optional<Boolean> reorder)
     {
-          return userService.allUsers(userRepository);
-    }
-
-    @GetMapping("/api/user/reorder")
-    public List<User> reorder()
-    {
-        List<User> orderedUser = userService.reorder(userRepository);
-        return orderedUser;
+        return userService.allUsers(userRepository, reorder.orElse(false));
     }
 
     @PostMapping(path = "/api/user/save")

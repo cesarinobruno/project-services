@@ -26,25 +26,26 @@ public class UserService
             repository.save(user);
      }
 
-     public List<User> allUsers(UserRepository repository)
+     public List<User> allUsers(UserRepository repository, boolean reorder)
      {
          List<User> listUser = (List) repository.findAll();
+         if(reorder)
+         {
+             this.reorder(listUser);
+         }
          return listUser;
      }
 
-     public List<User> reorder(UserRepository repository)
+     public List<User> reorder(final List<User> users)
       {
-       List<User> list = (List)repository.findAll();
-        if(list.size() >= 2)
-        {
-        Collections.sort(list, new Comparator<User>()
+      Collections.sort(users, new Comparator<User>()
         {
             @Override
-                public int compare(User o1, User o2) {
+                public int compare(User o1, User o2)
+                {
                    return o1.getName().compareTo(o2.getName());
                 }
             });
-        }
-        return list;
+          return users;
     }
 }
