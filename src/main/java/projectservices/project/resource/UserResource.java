@@ -1,14 +1,19 @@
 package projectservices.project.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.annotation.AliasFor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projectservices.project.model.User;
 import projectservices.project.repository.UserRepository;
 import projectservices.project.service.UserService;
 
+import javax.persistence.Access;
 import java.util.*;
 
+
+@CrossOrigin(origins = "*")
 @RestController
 public class UserResource {
 
@@ -23,7 +28,7 @@ public class UserResource {
     }
 
     @GetMapping( path = "/api/users")
-     public List<User> allUser(@RequestParam("reorder") Optional<Boolean> reorder)
+    public List<User> allUser(@RequestParam("reorder") Optional<Boolean> reorder)
     {
         return userService.allUsers(userRepository, reorder.orElse(false));
     }
