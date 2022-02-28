@@ -39,4 +39,11 @@ public class UserResource {
         userService.save(userRepository, user);
         return ResponseEntity.ok().body("Salvo com sucesso!");
     }
+
+    @DeleteMapping(path = "/api/users/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") Integer id)
+    {
+        userService.delete(userRepository, id);
+        return ResponseEntity.ok().body("Excluido com sucesso!");
+    }
 }

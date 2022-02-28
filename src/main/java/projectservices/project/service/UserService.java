@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import projectservices.project.model.User;
 import projectservices.project.repository.UserRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService
@@ -47,5 +49,20 @@ public class UserService
                 }
             });
           return users;
+    }
+
+    public void delete(UserRepository repository, Integer id)
+    {
+        Optional<User> user = repository.findById(id);
+
+        if(user.isEmpty())
+        {
+
+            throw new EntityNotFoundException("Usuário não existe na base de dados");
+        }
+        else
+        {
+            repository.delete(user.get());
+        }
     }
 }
