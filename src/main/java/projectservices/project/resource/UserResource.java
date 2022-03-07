@@ -33,7 +33,7 @@ public class UserResource {
         return userService.allUsers(userRepository, reorder.orElse(false));
     }
 
-    @PostMapping(path = "/api/user/save")
+    @PostMapping(path = "/api/users/save")
     public ResponseEntity<String> save(@RequestBody User user)
     {
         userService.save(userRepository, user);
