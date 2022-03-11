@@ -21,16 +21,16 @@ public class UserResource {
     private UserRepository userRepository;
     UserService userService = new UserService();
 
-    @GetMapping(path = "/api/user/{id}")
+    @GetMapping(path = "/api/users/{id}")
     public ResponseEntity oneUser(@PathVariable("id") Integer id)
     {
        return userService.oneUser(userRepository, id);
     }
 
     @GetMapping( path = "/api/users")
-    public List<User> allUser(@RequestParam("reorder") Optional<Boolean> reorder)
+    public List<User> allUser(@RequestParam("orderBy") Optional<Boolean> orderBy)
     {
-        return userService.allUsers(userRepository, reorder.orElse(false));
+        return userService.allUsers(userRepository, orderBy.orElse(false));
     }
 
     @PostMapping(path = "/api/users/save")

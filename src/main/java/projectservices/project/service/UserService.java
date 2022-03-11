@@ -28,10 +28,10 @@ public class UserService
             repository.save(user);
      }
 
-     public List<User> allUsers(UserRepository repository, boolean reorder)
+     public List<User> allUsers(UserRepository repository, boolean orderBy)
      {
          List<User> listUser = (List) repository.findAll();
-         if(reorder)
+         if(orderBy)
          {
              this.reorder(listUser);
          }
