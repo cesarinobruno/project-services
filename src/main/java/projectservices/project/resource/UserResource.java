@@ -1,49 +1,38 @@
 package projectservices.project.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.core.annotation.AliasFor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projectservices.project.model.User;
-import projectservices.project.repository.UserRepository;
 import projectservices.project.service.UserService;
 
-import javax.persistence.Access;
-import java.util.*;
-
+import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
 public class UserResource {
 
     @Autowired
-    private UserRepository userRepository;
     UserService userService = new UserService();
-
-    @GetMapping(path = "/api/users/{id}")
-    public ResponseEntity oneUser(@PathVariable("id") Integer id)
-    {
-       return userService.oneUser(userRepository, id);
-    }
 
     @GetMapping( path = "/api/users")
     public List<User> allUser(@RequestParam("orderBy") Optional<Boolean> orderBy)
     {
-        return userService.allUsers(userRepository, orderBy.orElse(false));
+        return userService.allUsers(orderBy.orElse(false));
     }
 
     @PostMapping(path = "/api/users/save")
     public ResponseEntity<String> save(@RequestBody User user)
     {
-        userService.save(userRepository, user);
+        userService.save(user);
         return ResponseEntity.ok().body("Salvo com sucesso!");
     }
 
     @DeleteMapping(path = "/api/users/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Integer id)
     {
-        userService.delete(userRepository, id);
+        userService.delete(id);
         return ResponseEntity.ok().body("Excluido com sucesso!");
     }
 }

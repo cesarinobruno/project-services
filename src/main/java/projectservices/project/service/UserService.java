@@ -1,40 +1,35 @@
 package projectservices.project.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import projectservices.project.Dao.UserDao;
 import projectservices.project.model.User;
-import projectservices.project.repository.UserRepository;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService
 {
-    public UserService(){}
+    public UserService() {}
 
-     public ResponseEntity<User> oneUser(UserRepository repository, Integer id)
+     public void save(User user)
      {
-         return repository.findById(id)
-                 .map(u -> ResponseEntity.ok().body(u))
-                 .orElse(ResponseEntity.notFound().build());
+            UserDao userDao = new UserDao();
+            userDao.save(user);
      }
 
-     public void save(UserRepository repository, User user)
+     public List<User> allUsers(boolean orderBy)
      {
-            repository.save(user);
-     }
+         UserDao dao = new UserDao();
 
-     public List<User> allUsers(UserRepository repository, boolean orderBy)
-     {
-         List<User> listUser = (List) repository.findAll();
+         List<User> listUser = dao.list();
+
          if(orderBy)
          {
              this.reorder(listUser);
          }
+
          return listUser;
      }
 
@@ -51,18 +46,10 @@ public class UserService
           return users;
     }
 
-    public void delete(UserRepository repository, Integer id)
+    public void delete(Integer id)
     {
-        Optional<User> user = repository.findById(id);
+        UserDao userDao = new UserDao();
 
-        if(user.isEmpty())
-        {
-
-            throw new EntityNotFoundException("Usuário não existe na base de dados");
-        }
-        else
-        {
-            repository.delete(user.get());
-        }
+        userDao.delete(id);
     }
 }

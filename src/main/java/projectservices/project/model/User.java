@@ -1,21 +1,13 @@
 package projectservices.project.model;
 
-import javax.persistence.*;
-
-@Entity(name = "user")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false, length = 10)
     private String login;
 
-    @Column(nullable = false, length = 10)
     private String password;
 
     public User() {}
