@@ -14,7 +14,7 @@ import java.util.Optional;
 public class UserResource {
 
     @Autowired
-    UserService userService = new UserService();
+    UserService userService;
 
     @GetMapping( path = "/api/users")
     public List<User> allUser(@RequestParam("orderBy") Optional<Boolean> orderBy)

@@ -11,19 +11,17 @@ import java.util.List;
 @Service
 public class UserService
 {
-    public UserService() {}
 
-     public void save(User user)
+    UserDao userDao = new UserDao();
+
+    public void save(User user)
      {
-            UserDao userDao = new UserDao();
-            userDao.save(user);
+         userDao.save(user);
      }
 
      public List<User> allUsers(boolean orderBy)
      {
-         UserDao dao = new UserDao();
-
-         List<User> listUser = dao.list();
+         List<User> listUser = userDao.list();
 
          if(orderBy)
          {
@@ -48,8 +46,6 @@ public class UserService
 
     public void delete(Integer id)
     {
-        UserDao userDao = new UserDao();
-
-        userDao.delete(id);
+       userDao.delete(id);
     }
 }
