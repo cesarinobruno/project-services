@@ -1,7 +1,7 @@
 package projectservices.project.Dao;
 
 import projectservices.project.Repository.SingleConnection;
-import projectservices.project.model.User;
+import projectservices.project.model.Person;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,27 +10,27 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDao
+public class PersonDao
 {
     private Connection connection;
 
 
-    public UserDao()
+    public PersonDao()
     {
         connection = SingleConnection.getConnection();
     }
 
-    public void save(User user)
+    public void save(Person person)
     {
-        String sql = "INSERT INTO user(name, login, password) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO person(name, login, password) VALUES (?, ?, ?)";
 
         try
         {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getLogin());
-            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setString(1, person.getName());
+            preparedStatement.setString(2, person.getLogin());
+            preparedStatement.setString(3, person.getPassword());
 
             preparedStatement.execute();
             connection.commit();
@@ -41,11 +41,11 @@ public class UserDao
         }
     }
 
-    public List<User> list()
+    public List<Person> list()
     {
-        List<User> listUser = new ArrayList<>();
+        List<Person> listPerson = new ArrayList<>();
 
-        String sql = "SELECT * FROM user";
+        String sql = "SELECT * FROM person";
 
         try
         {
@@ -54,16 +54,16 @@ public class UserDao
 
             while (rs.next())
             {
-                User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setName(rs.getString("name"));
-                user.setLogin(rs.getString("login"));
-                user.setPassword(rs.getString("password"));
+                Person person = new Person();
+                person.setId(rs.getInt("id"));
+                person.setName(rs.getString("name"));
+                person.setLogin(rs.getString("login"));
+                person.setPassword(rs.getString("password"));
 
-                listUser.add(user);
+                listPerson.add(person);
             }
 
-            return listUser;
+            return listPerson;
 
         }
         catch (SQLException e)

@@ -1,6 +1,6 @@
 package projectservices.project.model;
 
-public class User {
+public class Person {
 
     private Integer id;
 
@@ -10,9 +10,9 @@ public class User {
 
     private String password;
 
-    public User() {}
+    public Person() {}
 
-    public User(Integer id, String name, String login, String password) {
+    public Person(Integer id, String name, String login, String password) {
         this.id = id;
         this.name = name;
         this.login = login;
