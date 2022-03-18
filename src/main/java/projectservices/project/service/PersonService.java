@@ -12,16 +12,16 @@ import java.util.List;
 public class PersonService
 {
 
-    PersonDao userDao = new PersonDao();
+    PersonDao personDao = new PersonDao();
 
     public void save(Person person)
      {
-         userDao.save(person);
+         personDao.save(person);
      }
 
      public List<Person> allUsers(boolean orderBy)
      {
-         List<Person> listPerson = userDao.list();
+         List<Person> listPerson = personDao.list();
 
          if(orderBy)
          {
@@ -29,6 +29,18 @@ public class PersonService
          }
 
          return listPerson;
+     }
+
+     public Integer getPerson(Integer id)
+     {
+         Integer personId = personDao.getPerson(id);
+
+         if(personId == null)
+         {
+             return personId;
+         }
+         return personId;
+
      }
 
      public List<Person> reorder(final List<Person> people)
@@ -46,6 +58,6 @@ public class PersonService
 
     public void delete(Integer id)
     {
-       userDao.delete(id);
+       personDao.delete(id);
     }
 }

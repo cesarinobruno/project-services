@@ -74,20 +74,42 @@ public class PersonDao
         return null;
     }
 
-    public void delete(Integer id)
-    {
+    public void delete(Integer id) {
         String sql = "DELETE FROM user WHERE id = ".concat(Integer.toString(id));
 
-        try
-        {
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.execute();
             connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+    }
+
+    public Integer getPerson(Integer id)
+    {
+        String query = "SELECT * FROM person WHERE id = ".concat(Integer.toString(id));
+
+        try
+        {
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+            Person person = new Person();
+
+            while (rs.next())
+            {
+                person.setId(rs.getInt("id"));
+            }
+
+            return person.getId();
+        }
+
         catch (SQLException e)
         {
             e.printStackTrace();
         }
 
+        return null;
     }
 }
