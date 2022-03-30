@@ -25,8 +25,8 @@ public class FeedbackService
         feedbackDao.save(feedback, personId);
     }
 
-    public Boolean getFeedback(Integer personId)
+    public void getFeedback(Integer personId, Feedback feedback)
     {
-        return feedbackDao.checkForFeedbackFromUser(personId);
+        feedbackDao.checkForFeedbackFromUser(personId, feedback);
     }
 }

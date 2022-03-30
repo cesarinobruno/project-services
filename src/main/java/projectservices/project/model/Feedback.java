@@ -4,11 +4,11 @@ public class Feedback
 {
     private Integer id;
     private String message;
-    private Person personId;
+    private Integer personId;
 
     public Feedback(){}
 
-    public Feedback(Integer id, String message, Person personId)
+    public Feedback(Integer id, String message, Integer personId)
     {
         this.id = id;
         this.message = message;
@@ -35,12 +35,12 @@ public class Feedback
         this.message = message;
     }
 
-    public Person getPersonId()
+    public Integer getPersonId()
     {
         return personId;
     }
 
-    public void setPersonId(Person personId)
+    public void setPersonId(Integer personId)
     {
         this.personId = personId;
     }

@@ -76,7 +76,7 @@ public class PersonDao
 
     public void delete(final Integer id, final Boolean feedbackAssociateFromUser)
     {
-        if(feedbackAssociateFromUser != null)
+        if(feedbackAssociateFromUser)
         {
             String deleteFeedbackQuery = "DELETE FROM feedback WHERE personId = ".concat(Integer.toString(id));
 

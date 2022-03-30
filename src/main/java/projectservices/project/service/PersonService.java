@@ -3,6 +3,7 @@ package projectservices.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import projectservices.project.Dao.PersonDao;
+import projectservices.project.model.Feedback;
 import projectservices.project.model.Person;
 
 import java.util.Collections;
@@ -62,7 +63,17 @@ public class PersonService
 
     public void delete(Integer id)
     {
-       Boolean feedbackAssociateFromUser = feedbackService.getFeedback(id);
+       Feedback feedback = new Feedback();
+
+       Boolean feedbackAssociateFromUser = false;
+
+       feedbackService.getFeedback(id, feedback);
+
+       if(id.equals(feedback.getPersonId()))
+       {
+           feedbackAssociateFromUser = true;
+       }
+
        personDao.delete(id, feedbackAssociateFromUser);
     }
 }

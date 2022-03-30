@@ -17,7 +17,7 @@ public class FeedbackDao
         connection = SingleConnection.getConnection();
     }
 
-    public Boolean checkForFeedbackFromUser(final Integer personId)
+    public void checkForFeedbackFromUser(final Integer personId, final Feedback feedback)
     {
         String selectFeedbackQuery = "SELECT * FROM feedback WHERE personId = ".concat(personId.toString());
 
@@ -28,23 +28,14 @@ public class FeedbackDao
 
             if(rs.next())
             {
-                Feedback feedback = new Feedback();
-                feedback.setId(rs.getInt("id"));
-                feedback.setMessage(rs.getString("message"));
-
-                return true;
+                feedback.setPersonId(rs.getInt("personId"));
             }
-
-            return null;
 
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
-
-        return null;
-
     }
 
     public void save(final Feedback feedback, final Integer personId)
