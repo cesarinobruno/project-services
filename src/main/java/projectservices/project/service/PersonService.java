@@ -1,5 +1,6 @@
 package projectservices.project.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import projectservices.project.Dao.PersonDao;
 import projectservices.project.model.Person;
@@ -13,6 +14,9 @@ public class PersonService
 {
 
     PersonDao personDao = new PersonDao();
+
+    @Autowired
+    FeedbackService feedbackService;
 
     public void save(Person person)
      {
@@ -58,6 +62,7 @@ public class PersonService
 
     public void delete(Integer id)
     {
-       personDao.delete(id);
+       Boolean feedbackAssociateFromUser = feedbackService.getFeedback(id);
+       personDao.delete(id, feedbackAssociateFromUser);
     }
 }

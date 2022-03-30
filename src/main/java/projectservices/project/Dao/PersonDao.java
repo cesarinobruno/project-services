@@ -74,17 +74,34 @@ public class PersonDao
         return null;
     }
 
-    public void delete(Integer id) {
-        String sql = "DELETE FROM user WHERE id = ".concat(Integer.toString(id));
+    public void delete(final Integer id, final Boolean feedbackAssociateFromUser)
+    {
+        if(feedbackAssociateFromUser != null)
+        {
+            String deleteFeedbackQuery = "DELETE FROM feedback WHERE personId = ".concat(Integer.toString(id));
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.execute();
-            connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            try
+            {
+                PreparedStatement preparedStatement = connection.prepareStatement(deleteFeedbackQuery);
+                preparedStatement.execute();
+                connection.commit();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
+        String deletePersonQuery = "DELETE FROM person WHERE id = ".concat(Integer.toString(id));
+
+        try
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(deletePersonQuery);
+            preparedStatement.execute();
+            connection.commit();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public Integer getPerson(Integer id)
