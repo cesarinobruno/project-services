@@ -41,6 +41,23 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.17</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<!--
+				sem fazer nada, o spring security já nos
+				fornece um password a cada vez que o projeto sobe
+			-->
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+<!--			<scope>provided</scope>-->
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
