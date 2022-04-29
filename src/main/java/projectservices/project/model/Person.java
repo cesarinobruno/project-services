@@ -1,5 +1,7 @@
 package projectservices.project.model;
 
+import java.util.List;
+
 public class Person {
 
     private Integer id;
@@ -9,6 +11,10 @@ public class Person {
     private String login;
 
     private String password;
+
+    private List<Person> persons;
+
+    private Integer total;
 
     public Person() {}
 
@@ -20,6 +26,14 @@ public class Person {
     }
 
     public Integer getId() {return id;}
+
+    public List<Person> getPersons() { return persons; }
+
+    public void setPersons(List<Person> persons) { this.persons = persons; }
+
+    public Integer getTotal() { return total; }
+
+    public void setTotal(Integer total) { this.total = total; }
 
     public void setId(Integer id) {this.id = id;}
 

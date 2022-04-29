@@ -6,8 +6,6 @@ import projectservices.project.Dao.PersonDao;
 import projectservices.project.model.Feedback;
 import projectservices.project.model.Person;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -26,14 +24,23 @@ public class PersonService
 
      public List<Person> allUsers(boolean orderBy)
      {
-         List<Person> listPerson = personDao.list();
+         Person person = new Person();
+         List<Person> listPerson;
 
-         if(orderBy)
+         Integer count = personDao.countPerson();
+
+         if(orderBy && count > 1)
          {
-             this.reorder(listPerson);
+             listPerson = personDao.userListSorted();
+             person.setPersons(listPerson);
+         }
+         else
+         {
+             listPerson = personDao.list();
+             person.setPersons(listPerson);
          }
 
-         return listPerson;
+         return person.getPersons();
      }
 
      public Integer getPerson(Integer id)
@@ -48,18 +55,19 @@ public class PersonService
 
      }
 
-     public List<Person> reorder(final List<Person> people)
-      {
-      Collections.sort(people, new Comparator<Person>()
-        {
-            @Override
-                public int compare(Person o1, Person o2)
-                {
-                   return o1.getName().compareTo(o2.getName());
-                }
-            });
-          return people;
-    }
+//excluir ---> agora é feito no banco
+//     public List<Person> reorder(final List<Person> people)
+//      {
+//      Collections.sort(people, new Comparator<Person>()
+//        {
+//            @Override
+//                public int compare(Person o1, Person o2)
+//                {
+//                   return o1.getName().compareTo(o2.getName());
+//                }
+//            });
+//          return people;
+//    }
 
     public void delete(Integer id)
     {

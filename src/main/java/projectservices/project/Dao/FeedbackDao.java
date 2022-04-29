@@ -19,7 +19,7 @@ public class FeedbackDao
 
     public void checkForFeedbackFromUser(final Integer personId, final Feedback feedback)
     {
-        String selectFeedbackQuery = "SELECT * FROM feedback WHERE personId = ".concat(personId.toString());
+        String selectFeedbackQuery = "SELECT * FROM feedback fd WHERE fd.personId = ".concat(personId.toString());
 
         try
         {

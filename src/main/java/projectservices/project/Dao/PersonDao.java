@@ -129,4 +129,60 @@ public class PersonDao
 
         return null;
     }
+
+    public List<Person> userListSorted()
+    {
+        List<Person> list = new ArrayList<>();
+
+        String personsOrdered = "SELECT * FROM person p ORDER BY p.name";
+
+        try
+        {
+            PreparedStatement statement = connection.prepareStatement(personsOrdered);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next())
+            {
+                Person person = new Person();
+                person.setId(rs.getInt("id"));
+                person.setName(rs.getString("name"));
+                person.setLogin(rs.getString("login"));
+                person.setPassword(rs.getString("password"));
+
+                list.add(person);
+            }
+
+            return list;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public Integer countPerson()
+    {
+        String select = "SELECT COUNT(id) as qtd FROM person";
+        int count = 0;
+        try
+        {
+            PreparedStatement statement = connection.prepareStatement(select);
+            ResultSet rs = statement.executeQuery();
+
+            if(rs.next())
+            {
+                count = Integer.parseInt(rs.getString("qtd"));
+            }
+
+            return count;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 }

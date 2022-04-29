@@ -27,7 +27,7 @@ public class PersonResource {
     }
 
     @GetMapping(path = API_BASE_PATH)
-    public List<Person> allUser(@RequestParam("orderBy") Optional<Boolean> orderBy)
+    public List<Person> users(@RequestParam("orderBy") Optional<Boolean> orderBy)
     {
         return personService.allUsers(orderBy.orElse(false));
     }
