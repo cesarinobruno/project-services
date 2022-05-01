@@ -1,5 +1,7 @@
 package projectservices.project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 public class Person {
@@ -12,8 +14,9 @@ public class Person {
 
     private String password;
 
+    @JsonIgnore
     private List<Person> persons;
-
+    @JsonIgnore
     private Integer total;
 
     public Person() {}

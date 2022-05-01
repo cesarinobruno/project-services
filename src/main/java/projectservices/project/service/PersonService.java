@@ -22,7 +22,7 @@ public class PersonService
          personDao.save(person);
      }
 
-     public List<Person> allUsers(boolean orderBy)
+     public List<Person> listPerson(boolean orderBy)
      {
          Person person = new Person();
          List<Person> listPerson;
@@ -31,7 +31,7 @@ public class PersonService
 
          if(orderBy && count > 1)
          {
-             listPerson = personDao.userListSorted();
+             listPerson = personDao.listSortedByName();
              person.setPersons(listPerson);
          }
          else
@@ -73,15 +73,15 @@ public class PersonService
     {
        Feedback feedback = new Feedback();
 
-       Boolean feedbackAssociateFromUser = false;
+       Boolean feedbackAssociateFromPerson = false;
 
        feedbackService.getFeedback(id, feedback);
 
        if(id.equals(feedback.getPersonId()))
        {
-           feedbackAssociateFromUser = true;
+           feedbackAssociateFromPerson = true;
        }
 
-       personDao.delete(id, feedbackAssociateFromUser);
+       personDao.delete(id, feedbackAssociateFromPerson);
     }
 }

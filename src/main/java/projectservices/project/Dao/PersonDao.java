@@ -20,13 +20,18 @@ public class PersonDao
         connection = SingleConnection.getConnection();
     }
 
+    private static String PERSON_SQL = "SELECT * FROM person";
+    private static String PERSON_FROM_SQL = "FROM person";
+    private static String FEEDBACK_FROM_SQL = "FROM feedback";
+    private static String PERSON_COLUMS = "(name, login, password)";
+
     public void save(Person person)
     {
-        String sql = "INSERT INTO person(name, login, password) VALUES (?, ?, ?)";
+        StringBuilder sqlBuilder = new StringBuilder("INSERT INTO person " + PERSON_COLUMS).append(" VALUES (?, ?, ?)");
 
         try
         {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlBuilder.toString());
 
             preparedStatement.setString(1, person.getName());
             preparedStatement.setString(2, person.getLogin());
@@ -45,7 +50,7 @@ public class PersonDao
     {
         List<Person> listPerson = new ArrayList<>();
 
-        String sql = "SELECT * FROM person";
+        String sql = PERSON_SQL;
 
         try
         {
@@ -74,11 +79,15 @@ public class PersonDao
         return null;
     }
 
-    public void delete(final Integer id, final Boolean feedbackAssociateFromUser)
+    public void delete(final Integer id, final Boolean feedbackAssociateFromPerson)
     {
-        if(feedbackAssociateFromUser)
+        StringBuilder sqlBuilder = null;
+
+        if(feedbackAssociateFromPerson)
         {
-            String deleteFeedbackQuery = "DELETE FROM feedback WHERE personId = ".concat(Integer.toString(id));
+            sqlBuilder = new StringBuilder("DELETE " + FEEDBACK_FROM_SQL + " WHERE personId = " + id);
+            String deleteFeedbackQuery = sqlBuilder.toString();
+            sqlBuilder = null;
 
             try
             {
@@ -90,23 +99,29 @@ public class PersonDao
             }
         }
 
-        String deletePersonQuery = "DELETE FROM person WHERE id = ".concat(Integer.toString(id));
+        if(sqlBuilder == null)
+        {
+            sqlBuilder = new StringBuilder("DELETE " + PERSON_FROM_SQL + " WHERE id = " + id);
 
-        try
-        {
-            PreparedStatement preparedStatement = connection.prepareStatement(deletePersonQuery);
-            preparedStatement.execute();
-            connection.commit();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            String deletePersonQuery = sqlBuilder.toString();
+
+            try
+            {
+                PreparedStatement preparedStatement = connection.prepareStatement(deletePersonQuery);
+                preparedStatement.execute();
+                connection.commit();
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     public Integer getPerson(Integer id)
     {
-        String query = "SELECT * FROM person WHERE id = ".concat(Integer.toString(id));
+        StringBuilder sqlBuilder = new StringBuilder(PERSON_SQL).append(" WHERE id = ").append(id);
+        String query = sqlBuilder.toString();
 
         try
         {
@@ -130,8 +145,11 @@ public class PersonDao
         return null;
     }
 
-    public List<Person> userListSorted()
+    public List<Person> listSortedByName()
     {
+        //melhorar sql e usar o stringBuilder
+        //adicionar um switch, pois futuramente teremos ordenação diferente.
+
         List<Person> list = new ArrayList<>();
 
         String personsOrdered = "SELECT * FROM person p ORDER BY p.name";
@@ -164,11 +182,11 @@ public class PersonDao
 
     public Integer countPerson()
     {
-        String select = "SELECT COUNT(id) as qtd FROM person";
+        String sqlBuilder = new StringBuilder("SELECT COUNT(id) as qtd ").append(PERSON_FROM_SQL).toString();
         int count = 0;
         try
         {
-            PreparedStatement statement = connection.prepareStatement(select);
+            PreparedStatement statement = connection.prepareStatement(sqlBuilder);
             ResultSet rs = statement.executeQuery();
 
             if(rs.next())

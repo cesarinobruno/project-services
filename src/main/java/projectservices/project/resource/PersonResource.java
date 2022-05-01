@@ -29,7 +29,7 @@ public class PersonResource {
     @GetMapping(path = API_BASE_PATH)
     public List<Person> users(@RequestParam("orderBy") Optional<Boolean> orderBy)
     {
-        return personService.allUsers(orderBy.orElse(false));
+        return personService.listPerson(orderBy.orElse(false));
     }
 
     @PostMapping(path = API_BASE_PATH + "/save")
