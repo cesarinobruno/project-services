@@ -12,6 +12,9 @@ public class FeedbackDao
 {
     private Connection connection;
 
+    private static String FEEDBACK_SQL = "SELECT * FROM feedback fd";
+    private static String FEEDBACK_INSERT = "INSERT INTO feedback (message, personId)";
+
     public FeedbackDao()
     {
         connection = SingleConnection.getConnection();
@@ -19,11 +22,11 @@ public class FeedbackDao
 
     public void checkForFeedbackFromUser(final Integer personId, final Feedback feedback)
     {
-        String selectFeedbackQuery = "SELECT * FROM feedback fd WHERE fd.personId = ".concat(personId.toString());
+        StringBuilder sqlBuilder = new StringBuilder(FEEDBACK_SQL + " WHERE fd.personId = ").append(personId);
 
         try
         {
-            PreparedStatement statement = connection.prepareStatement(selectFeedbackQuery);
+            PreparedStatement statement = connection.prepareStatement(sqlBuilder.toString());
             ResultSet rs = statement.executeQuery();
 
             if(rs.next())
@@ -40,12 +43,10 @@ public class FeedbackDao
 
     public void save(final Feedback feedback, final Integer personId)
     {
-        String query = "INSERT INTO feedback(message, personId) VALUES (?, ?)";
-
+        StringBuilder sqlBuilder = new StringBuilder(FEEDBACK_INSERT + " VALUES (?, ?)");
         try
         {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlBuilder.toString());
             preparedStatement.setString(1, feedback.getMessage());
             preparedStatement.setObject(2, personId);
 

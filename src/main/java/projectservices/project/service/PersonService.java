@@ -45,6 +45,7 @@ public class PersonService
 
      public Integer getPerson(Integer id)
      {
+         //verify person exists
          Integer personId = personDao.getPerson(id);
 
          if(personId == null)
