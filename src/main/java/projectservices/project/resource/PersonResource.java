@@ -27,9 +27,9 @@ public class PersonResource {
     }
 
     @GetMapping(path = API_BASE_PATH)
-    public List<Person> users(@RequestParam("orderBy") Optional<Boolean> orderBy)
+    public List<Person> users(@RequestParam("orderBy") Optional<Boolean> orderBy, @RequestParam("type") Optional<String> type)
     {
-        return personService.listPerson(orderBy.orElse(false));
+        return personService.listPerson(orderBy.orElse(false), type.orElse("createdOn"));
     }
 
     @PostMapping(path = API_BASE_PATH + "/save")

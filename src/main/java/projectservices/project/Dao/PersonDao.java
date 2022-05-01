@@ -145,14 +145,26 @@ public class PersonDao
         return null;
     }
 
-    public List<Person> listSortedByName()
+    public List<Person> listSortedByName(String sortType)
     {
-        //melhorar sql e usar o stringBuilder
-        //adicionar um switch, pois futuramente teremos ordenação diferente.
-
         List<Person> list = new ArrayList<>();
 
-        String personsOrdered = "SELECT * FROM person p ORDER BY p.name";
+        StringBuilder sqlBuilder = new StringBuilder(PERSON_SQL + " p ORDER BY ");
+
+        switch (sortType)
+        {
+            case "createdOn":
+                sqlBuilder.append("p.id");
+                break;
+            case "name":
+                sqlBuilder.append("p.name");
+                break;
+                default:
+                sqlBuilder.append("");
+                break;
+        }
+
+        String personsOrdered = sqlBuilder.toString();
 
         try
         {

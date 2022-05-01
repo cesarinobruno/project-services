@@ -22,7 +22,7 @@ public class PersonService
          personDao.save(person);
      }
 
-     public List<Person> listPerson(boolean orderBy)
+     public List<Person> listPerson(boolean orderBy, String sortType)
      {
          Person person = new Person();
          List<Person> listPerson;
@@ -31,9 +31,11 @@ public class PersonService
 
          if(orderBy && count > 1)
          {
-             listPerson = personDao.listSortedByName();
+             listPerson = personDao.listSortedByName(sortType);
              person.setPersons(listPerson);
          }
+
+         //faz sentido manter os dois, pois é processamento para realizar o orderBy geralmente é maior
          else
          {
              listPerson = personDao.list();
@@ -55,20 +57,6 @@ public class PersonService
          return personId;
 
      }
-
-//excluir ---> agora é feito no banco
-//     public List<Person> reorder(final List<Person> people)
-//      {
-//      Collections.sort(people, new Comparator<Person>()
-//        {
-//            @Override
-//                public int compare(Person o1, Person o2)
-//                {
-//                   return o1.getName().compareTo(o2.getName());
-//                }
-//            });
-//          return people;
-//    }
 
     public void delete(Integer id)
     {
