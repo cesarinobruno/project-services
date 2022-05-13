@@ -19,7 +19,7 @@ public class FeedbackService
 
         if(personId == null)
         {
-            throw new Exception("Usuário não é mesmo da publicação");
+            throw new Exception("Usuário não é o mesmo da publicação");
         }
 
         feedbackDao.save(feedback, personId);

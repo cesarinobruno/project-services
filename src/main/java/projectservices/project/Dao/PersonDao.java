@@ -79,7 +79,7 @@ public class PersonDao
         return null;
     }
 
-    public void delete(final Integer id, final Boolean feedbackAssociateFromPerson)
+    public void delete(final Integer id, boolean feedbackAssociateFromPerson)
     {
         StringBuilder sqlBuilder = null;
 

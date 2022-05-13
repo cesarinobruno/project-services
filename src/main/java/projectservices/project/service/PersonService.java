@@ -62,7 +62,7 @@ public class PersonService
     {
        Feedback feedback = new Feedback();
 
-       Boolean feedbackAssociateFromPerson = false;
+       boolean feedbackAssociateFromPerson = false;
 
        feedbackService.getFeedback(id, feedback);
 
