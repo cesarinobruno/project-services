@@ -33,11 +33,19 @@ public class PersonResource {
     }
 
     @PostMapping(path = API_BASE_PATH + "/save")
-    public ResponseEntity<String> save(@RequestBody Person person)
+    public ResponseEntity<String> save(@RequestBody Person person) throws Exception
     {
         person.setPassword(encoder.encode(person.getPassword()));
-        personService.save(person);
+        personService.save(person, null);
         return ResponseEntity.ok().body("Salvo com sucesso!");
+    }
+
+    @PutMapping(path = API_BASE_PATH + "/update/{id}")
+    public ResponseEntity<String> update(@RequestBody Person person, @PathVariable Integer id) throws Exception
+    {
+        person.setPassword(encoder.encode(person.getPassword()));
+        personService.save(person, id);
+        return ResponseEntity.ok().body("Atualizado com sucesso!");
     }
 
     @DeleteMapping(path = API_BASE_PATH + "/{id}")

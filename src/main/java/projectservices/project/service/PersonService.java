@@ -17,9 +17,24 @@ public class PersonService
     @Autowired
     FeedbackService feedbackService;
 
-    public void save(Person person)
-     {
-         personDao.save(person);
+    public void save(Person person, Integer personId) throws Exception {
+        if(personId == null)
+        {
+            personDao.save(person);
+        }
+        else
+        {
+            Integer id = personDao.getPerson(personId);
+            if(id == null)
+            {
+                throw new Exception("Usuário não existe na base de dados");
+            }
+            else
+            {
+                personDao.update(person, id);
+            }
+        }
+
      }
 
      public List<Person> listPerson(boolean orderBy, String sortType)
@@ -34,7 +49,6 @@ public class PersonService
              listPerson = personDao.listSortedByName(sortType);
              person.setPersons(listPerson);
          }
-
          //faz sentido manter os dois, pois é processamento para realizar o orderBy geralmente é maior
          else
          {
@@ -47,7 +61,7 @@ public class PersonService
 
      public Integer getPerson(Integer id)
      {
-         //verify person exists
+         //has a person 
          Integer personId = personDao.getPerson(id);
 
          if(personId == null)
@@ -55,7 +69,6 @@ public class PersonService
              return personId;
          }
          return personId;
-
      }
 
     public void delete(Integer id)
@@ -70,7 +83,6 @@ public class PersonService
        {
            feedbackAssociateFromPerson = true;
        }
-
        personDao.delete(id, feedbackAssociateFromPerson);
     }
 }

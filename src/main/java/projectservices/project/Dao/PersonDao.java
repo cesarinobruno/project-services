@@ -3,10 +3,7 @@ package projectservices.project.Dao;
 import projectservices.project.Repository.SingleConnection;
 import projectservices.project.model.Person;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -214,5 +211,25 @@ public class PersonDao
         }
 
         return 0;
+    }
+
+    public void update(Person person, Integer id)
+    {
+        StringBuilder sqlBuilder = new StringBuilder("UPDATE person SET name=?, login=?, password=? WHERE id = ?");
+
+        try
+        {
+            PreparedStatement statement = connection.prepareStatement(sqlBuilder.toString());
+            statement.setString(1, person.getName());
+            statement.setString(2, person.getLogin());
+            statement.setString(3, person.getPassword());
+            statement.setInt(4, id);
+            statement.executeUpdate();
+            connection.commit();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
 }
