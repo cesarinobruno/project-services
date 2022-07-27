@@ -27,7 +27,7 @@ public class FeedbackService
         }
         else
         {
-            throw new Exception("id do usuário logado não corresponde ao personId do post");
+            throw new Exception("id do usuário logado não corresponde ao personId da publicação");
         }
     }
 
