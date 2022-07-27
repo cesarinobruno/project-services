@@ -17,12 +17,18 @@ public class FeedbackService
 
         Integer personId = personService.getPerson(id);
 
-        if(personId == null)
+        if(personId.equals(null))
         {
-            throw new Exception("Usuário não é o mesmo da publicação");
+            throw new Exception("Usuário não existe");
         }
-
-        feedbackDao.save(feedback, personId);
+        else if(personId.equals(feedback.getPersonId()))
+        {
+            feedbackDao.save(feedback, personId);
+        }
+        else
+        {
+            throw new Exception("id do usuário logado não corresponde ao personId do post");
+        }
     }
 
     public void getFeedback(Integer personId, Feedback feedback)
