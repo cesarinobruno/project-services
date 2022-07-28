@@ -17,21 +17,23 @@ public class PersonService
     @Autowired
     FeedbackService feedbackService;
 
-    public void save(Person person, Integer personId) throws Exception {
+    public void save(Person person, Integer personId) throws Exception
+    {
         if(personId == null)
         {
             personDao.save(person);
         }
         else
         {
-            Integer id = personDao.getPerson(personId);
-            if(id == null)
+            Person hasPerson = personDao.getPerson(personId);
+
+            if(hasPerson.getId() == null)
             {
                 throw new Exception("Usuário não existe na base de dados");
             }
             else
             {
-                personDao.update(person, id);
+                personDao.update(person, hasPerson.getId());
             }
         }
 
@@ -59,16 +61,16 @@ public class PersonService
          return person.getPersons();
      }
 
-     public Integer getPerson(Integer id)
+     public Person getPerson(Integer id)
      {
          //has a person 
-         Integer personId = personDao.getPerson(id);
+         Person person = personDao.getPerson(id);
 
-         if(personId == null)
+         if(person != null)
          {
-             return personId;
+             return person;
          }
-         return personId;
+         return null;
      }
 
     public void delete(Integer id)

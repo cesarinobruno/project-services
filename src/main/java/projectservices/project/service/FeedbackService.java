@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import projectservices.project.Dao.FeedbackDao;
 import projectservices.project.model.Feedback;
+import projectservices.project.model.Person;
 
 @Controller
 public class FeedbackService
@@ -15,19 +16,19 @@ public class FeedbackService
 
     public void save(Feedback feedback, Integer id) throws Exception {
 
-        Integer personId = personService.getPerson(id);
+        Person person = personService.getPerson(id);
 
-        if(personId.equals(null))
+        if(person == null)
         {
             throw new Exception("Usuário não existe");
         }
-        else if(personId.equals(feedback.getPersonId()))
+        else if(person.getId().equals(feedback.getPersonId()))
         {
-            feedbackDao.save(feedback, personId);
+            feedbackDao.save(feedback, person.getId());
         }
         else
         {
-            throw new Exception("id do usuário logado não corresponde ao personId da publicação");
+            throw new Exception("id do usuário logado não corresponde ao personId do usuário do novo post");
         }
     }
 

@@ -115,7 +115,7 @@ public class PersonDao
         }
     }
 
-    public Integer getPerson(Integer id)
+    public Person getPerson(Integer id)
     {
         StringBuilder sqlBuilder = new StringBuilder(PERSON_SQL).append(" WHERE id = ").append(id);
         String query = sqlBuilder.toString();
@@ -124,14 +124,14 @@ public class PersonDao
         {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
-            Person person = new Person();
+            Person person = null;
 
             while (rs.next())
             {
-                person.setId(rs.getInt("id"));
+                person = new Person(rs.getInt("id"), rs.getString("name"),
+                        rs.getString("login"), rs.getString("password"));
             }
-
-            return person.getId();
+            return person;
         }
 
         catch (SQLException e)
