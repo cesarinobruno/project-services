@@ -40,6 +40,12 @@ public class PersonResource {
         return ResponseEntity.ok().body("Salvo com sucesso!");
     }
 
+    @GetMapping(path = API_BASE_PATH + "/{id}")
+    public Person users(@PathVariable Integer id)
+    {
+        return personService.getPerson(id);
+    }
+
     @PutMapping(path = API_BASE_PATH + "/update/{id}")
     public ResponseEntity<String> update(@RequestBody Person person, @PathVariable Integer id) throws Exception
     {
