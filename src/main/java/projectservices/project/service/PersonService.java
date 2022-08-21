@@ -3,6 +3,7 @@ package projectservices.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import projectservices.project.Dao.PersonDao;
+import projectservices.project.Util.Util;
 import projectservices.project.model.Feedback;
 import projectservices.project.model.Person;
 
@@ -13,30 +14,33 @@ public class PersonService
 {
 
     PersonDao personDao = new PersonDao();
+    Util util = new Util();
 
     @Autowired
     FeedbackService feedbackService;
 
     public void save(Person person, Integer personId) throws Exception
     {
-        if(personId == null)
+        if(!util.isNull(person))
         {
-            personDao.save(person);
-        }
-        else
-        {
-            Person hasPerson = personDao.getPerson(personId);
-
-            if(hasPerson.getId() == null)
+            if(!util.isNull(personId))
             {
-                throw new Exception("Usuário não existe na base de dados");
+                Person hasPerson = personDao.getPerson(personId);
+
+                if(util.isNull(hasPerson.getId()))
+                {
+                    throw new Exception("Usuário não existe na base de dados");
+                }
+                else
+                {
+                    personDao.update(person, hasPerson.getId());
+                }
             }
             else
             {
-                personDao.update(person, hasPerson.getId());
+                personDao.save(person);
             }
         }
-
      }
 
      public List<Person> listPerson(boolean orderBy, String sortType)
