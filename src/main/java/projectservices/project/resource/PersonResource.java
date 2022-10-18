@@ -36,7 +36,7 @@ public class PersonResource {
     public ResponseEntity<String> save(@RequestBody Person person) throws Exception
     {
         person.setPassword(encoder.encode(person.getPassword()));
-        personService.save(person, null);
+        personService.save(person);
         return ResponseEntity.ok().body("Salvo com sucesso!");
     }
 
@@ -49,8 +49,8 @@ public class PersonResource {
     @PutMapping(path = API_BASE_PATH + "/update/{id}")
     public ResponseEntity<String> update(@RequestBody Person person, @PathVariable Integer id) throws Exception
     {
-        person.setPassword(encoder.encode(person.getPassword()));
-        personService.save(person, id);
+//        person.setPassword(encoder.encode(person.getPassword()));
+        personService.update(person, id);
         return ResponseEntity.ok().body("Atualizado com sucesso!");
     }
 

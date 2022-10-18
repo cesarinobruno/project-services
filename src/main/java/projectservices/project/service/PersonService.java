@@ -14,32 +14,15 @@ public class PersonService
 {
 
     PersonDao personDao = new PersonDao();
-    Util util = new Util();
 
     @Autowired
     FeedbackService feedbackService;
 
-    public void save(Person person, Integer personId) throws Exception
+    public void save(Person person) throws Exception
     {
-        if(!util.isNull(person))
+        if(person != null)
         {
-            if(!util.isNull(personId))
-            {
-                Person hasPerson = personDao.getPerson(personId);
-
-                if(util.isNull(hasPerson.getId()))
-                {
-                    throw new Exception("Usuário não existe na base de dados");
-                }
-                else
-                {
-                    personDao.update(person, hasPerson.getId());
-                }
-            }
-            else
-            {
-                personDao.save(person);
-            }
+           personDao.save(person);
         }
      }
 
@@ -90,5 +73,19 @@ public class PersonService
            feedbackAssociateFromPerson = true;
        }
        personDao.delete(id, feedbackAssociateFromPerson);
+    }
+
+    public void update(Person person, Integer id)
+    {
+        if(person != null && id > 0)
+        {
+            Person personData = getPerson(id);
+
+            if(personData == null || personData.getId() != person.getId())
+            {
+                throw new IllegalArgumentException("Person id não corresponde a de nenhum person do banco");
+            }
+            personDao.update(personData, id);
+        }
     }
 }
