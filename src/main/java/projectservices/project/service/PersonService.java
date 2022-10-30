@@ -62,7 +62,7 @@ public class PersonService
 
     public void delete(Integer id)
     {
-       Feedback feedback = new Feedback();
+       final Feedback feedback = new Feedback();
 
        boolean feedbackAssociateFromPerson = false;
 
@@ -79,13 +79,13 @@ public class PersonService
     {
         if(person != null && id > 0)
         {
-            Person personData = getPerson(id);
+            final Person personFromData = getPerson(id);
 
-            if(personData == null || personData.getId() != person.getId())
+            if(personFromData == null || personFromData.getId() != person.getId())
             {
                 throw new IllegalArgumentException("Person id não corresponde a de nenhum person do banco");
             }
-            personDao.update(personData, id);
+            personDao.update(personFromData, id);
         }
     }
 }

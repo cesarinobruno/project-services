@@ -101,7 +101,6 @@ public class PersonDao
             sqlBuilder = new StringBuilder("DELETE " + PERSON_FROM_SQL + " WHERE id = " + id);
 
             String deletePersonQuery = sqlBuilder.toString();
-
             try
             {
                 PreparedStatement preparedStatement = connection.prepareStatement(deletePersonQuery);
@@ -157,7 +156,6 @@ public class PersonDao
                 sqlBuilder.append("p.name");
                 break;
                 default:
-                sqlBuilder.append("");
                 break;
         }
 
