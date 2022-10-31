@@ -45,7 +45,7 @@ public class PersonDao
 
     public List<Person> list()
     {
-        List<Person> listPerson = new ArrayList<>();
+        List<Person> personAdded = new ArrayList<>();
 
         String sql = PERSON_SQL;
 
@@ -61,11 +61,10 @@ public class PersonDao
                 person.setName(rs.getString("name"));
                 person.setLogin(rs.getString("login"));
                 person.setPassword(rs.getString("password"));
-
-                listPerson.add(person);
+                personAdded.add(person);
             }
 
-            return listPerson;
+            return personAdded;
 
         }
         catch (SQLException e)
