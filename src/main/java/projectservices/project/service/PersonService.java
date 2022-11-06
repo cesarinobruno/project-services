@@ -3,7 +3,6 @@ package projectservices.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import projectservices.project.Dao.PersonDao;
-import projectservices.project.Util.Util;
 import projectservices.project.model.Feedback;
 import projectservices.project.model.Person;
 
@@ -75,7 +74,7 @@ public class PersonService
        personDao.delete(id, feedbackAssociateFromPerson);
     }
 
-    public void update(Person person, Integer id)
+    public void update(Person person, Integer id) throws Exception
     {
         if(person != null && id > 0)
         {
@@ -83,9 +82,11 @@ public class PersonService
 
             if(personFromData == null || personFromData.getId() != person.getId())
             {
-                throw new IllegalArgumentException("Person id não corresponde a de nenhum person do banco");
+               throw new IllegalArgumentException("Person id não corresponde a de nenhum person do banco");
             }
-            personDao.update(personFromData, id);
+             personDao.update(person, id);
+             return;
         }
+        throw new IllegalArgumentException("Parâmetro invalido(s)");
     }
 }

@@ -49,7 +49,7 @@ public class PersonResource {
     @PutMapping(path = API_BASE_PATH + "/update/{id}")
     public ResponseEntity<String> update(@RequestBody Person person, @PathVariable Integer id) throws Exception
     {
-//        person.setPassword(encoder.encode(person.getPassword()));
+        person.setPassword(encoder.encode(person.getPassword()));
         personService.update(person, id);
         return ResponseEntity.ok().body("Atualizado com sucesso!");
     }

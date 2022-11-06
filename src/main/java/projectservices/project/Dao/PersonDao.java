@@ -210,7 +210,7 @@ public class PersonDao
         return 0;
     }
 
-    public void update(Person person, Integer id)
+    public void update(Person person, Integer id) throws Exception
     {
         StringBuilder sqlBuilder = new StringBuilder("UPDATE person SET name=?, login=?, password=? WHERE id = ?");
 
@@ -221,12 +221,19 @@ public class PersonDao
             statement.setString(2, person.getLogin());
             statement.setString(3, person.getPassword());
             statement.setInt(4, id);
-            statement.executeUpdate();
-            connection.commit();
+
+            int update = statement.executeUpdate();
+            if(update > 0)
+            {
+                connection.commit();
+                return;
+            }
+            connection.rollback();
+            throw new Exception("Operação não realizada");
         }
-        catch (SQLException e)
+        finally
         {
-            e.printStackTrace();
+            connection.close();
         }
     }
 }
