@@ -27,10 +27,10 @@ public class PersonService
 
      public List<Person> listPerson(boolean orderBy, String sortType)
      {
-         Person person = new Person();
-         List<Person> listPerson;
+         final Person person = new Person();
+         final List<Person> listPerson;
 
-         Integer count = personDao.countPerson();
+         final Integer count = personDao.countPerson();
 
          if(orderBy && count > 1)
          {
@@ -47,17 +47,23 @@ public class PersonService
          return person.getPersons();
      }
 
-     public Person getPerson(Integer id)
-     {
+     public Person getPerson(Integer id) {
          //has a person 
-         Person person = personDao.getPerson(id);
-
-         if(person != null)
+         final Person person = personDao.getPerson(id);
+         try
          {
-             return person;
+             if (person != null)
+             {
+                 return person;
+             }
+             throw new Exception("Não existe person para esse personId: " + id);
+         }
+         catch (Exception e)
+         {
+             e.printStackTrace();
          }
          return null;
-     }
+    }
 
     public void delete(Integer id)
     {

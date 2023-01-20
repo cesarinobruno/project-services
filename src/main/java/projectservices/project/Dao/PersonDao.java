@@ -186,21 +186,16 @@ public class PersonDao
         return null;
     }
 
-    public Integer countPerson()
-    {
+    public Integer countPerson() {
         String sqlBuilder = new StringBuilder("SELECT COUNT(id) as qtd ").append(PERSON_FROM_SQL).toString();
-        int count = 0;
-        try
-        {
+
+        try {
             PreparedStatement statement = connection.prepareStatement(sqlBuilder);
             ResultSet rs = statement.executeQuery();
 
-            if(rs.next())
-            {
-                count = Integer.parseInt(rs.getString("qtd"));
+            if (rs.next()) {
+                return Integer.parseInt(rs.getString("qtd"));
             }
-
-            return count;
         }
         catch (SQLException e)
         {
@@ -223,11 +218,13 @@ public class PersonDao
             statement.setInt(4, id);
 
             int update = statement.executeUpdate();
+
             if(update > 0)
             {
                 connection.commit();
                 return;
             }
+
             connection.rollback();
             throw new Exception("Operação não realizada");
         }
