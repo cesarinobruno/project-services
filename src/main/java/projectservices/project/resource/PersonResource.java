@@ -33,8 +33,7 @@ public class PersonResource {
     }
 
     @PostMapping(path = API_BASE_PATH + "/save")
-    public ResponseEntity<String> save(@RequestBody Person person) throws Exception
-    {
+    public ResponseEntity<String> save(@RequestBody Person person) throws Exception {
         person.setPassword(encoder.encode(person.getPassword()));
         personService.save(person);
         return ResponseEntity.ok().body("Salvo com sucesso!");

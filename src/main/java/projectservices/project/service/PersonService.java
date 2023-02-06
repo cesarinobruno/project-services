@@ -19,9 +19,17 @@ public class PersonService
 
     public void save(Person person) throws Exception
     {
-        if(person != null)
+        try
         {
-           personDao.save(person);
+            if(person != null)
+            {
+                personDao.save(person);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Operação não realizada");
         }
      }
 

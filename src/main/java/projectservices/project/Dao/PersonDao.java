@@ -3,7 +3,10 @@ package projectservices.project.Dao;
 import projectservices.project.Repository.SingleConnection;
 import projectservices.project.model.Person;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,24 +25,26 @@ public class PersonDao
     private static String FEEDBACK_FROM_SQL = "FROM feedback";
     private static String PERSON_COLUMS = "(name, login, password)";
 
-    public void save(Person person)
-    {
-        StringBuilder sqlBuilder = new StringBuilder("INSERT INTO person " + PERSON_COLUMS).append(" VALUES (?, ?, ?)");
+    public void save(Person person) throws SQLException {
+        StringBuilder sqlBuilder = new StringBuilder("INSERT INTO person " + PERSON_COLUMS).append(" VALUES (?, ?, ?, ?)");
 
         try
         {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlBuilder.toString());
+            preparedStatement.setInt(1, person.getId());
+            preparedStatement.setString(2, person.getName());
+            preparedStatement.setString(3, person.getLogin());
+            preparedStatement.setString(4, person.getPassword());
 
-            preparedStatement.setString(1, person.getName());
-            preparedStatement.setString(2, person.getLogin());
-            preparedStatement.setString(3, person.getPassword());
-
-            preparedStatement.execute();
-            connection.commit();
+            boolean isExecuteQuery = preparedStatement.execute();
+            if(isExecuteQuery)
+            {
+                connection.commit();
+            }
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
-            e.printStackTrace();
+            throw new SQLException();
         }
     }
 
