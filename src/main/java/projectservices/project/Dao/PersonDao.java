@@ -26,15 +26,14 @@ public class PersonDao
     private static String PERSON_COLUMS = "(name, login, password)";
 
     public void save(Person person) throws SQLException {
-        StringBuilder sqlBuilder = new StringBuilder("INSERT INTO person " + PERSON_COLUMS).append(" VALUES (?, ?, ?, ?)");
+        StringBuilder sqlBuilder = new StringBuilder("INSERT INTO person " + PERSON_COLUMS).append(" VALUES (?, ?, ?)");
 
         try
         {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlBuilder.toString());
-            preparedStatement.setInt(1, person.getId());
-            preparedStatement.setString(2, person.getName());
-            preparedStatement.setString(3, person.getLogin());
-            preparedStatement.setString(4, person.getPassword());
+            preparedStatement.setString(1, person.getName());
+            preparedStatement.setString(2, person.getLogin());
+            preparedStatement.setString(3, person.getPassword());
 
             boolean isExecuteQuery = preparedStatement.execute();
             if(isExecuteQuery)
@@ -212,15 +211,14 @@ public class PersonDao
 
     public void update(Person person, Integer id) throws Exception
     {
-        StringBuilder sqlBuilder = new StringBuilder("UPDATE person SET name=?, login=?, password=? WHERE id = ?");
+        StringBuilder sqlBuilder = new StringBuilder("UPDATE person SET name=?, login=? WHERE id = ?");
 
         try
         {
             PreparedStatement statement = connection.prepareStatement(sqlBuilder.toString());
             statement.setString(1, person.getName());
             statement.setString(2, person.getLogin());
-            statement.setString(3, person.getPassword());
-            statement.setInt(4, id);
+            statement.setInt(3, id);
 
             int update = statement.executeUpdate();
 
@@ -229,13 +227,12 @@ public class PersonDao
                 connection.commit();
                 return;
             }
-
             connection.rollback();
             throw new Exception("Operação não realizada");
         }
         finally
         {
-            connection.close();
+//            connection.close();
         }
     }
 }

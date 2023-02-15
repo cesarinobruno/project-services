@@ -36,22 +36,18 @@ public class PersonService
      public List<Person> listPerson(boolean orderBy, String sortType)
      {
          final Person person = new Person();
-         final List<Person> listPerson;
 
          final Integer count = personDao.countPerson();
 
          if(orderBy && count > 1)
          {
-             listPerson = personDao.listSortedByName(sortType);
-             person.setPersons(listPerson);
+             person.setPersons(personDao.listSortedByName(sortType));
          }
          //faz sentido manter os dois, pois é processamento para realizar o orderBy geralmente é maior
          else
          {
-             listPerson = personDao.list();
-             person.setPersons(listPerson);
+             person.setPersons(personDao.list());
          }
-
          return person.getPersons();
      }
 
@@ -64,7 +60,7 @@ public class PersonService
              {
                  return person;
              }
-             throw new Exception("Não existe person para esse personId: " + id);
+             throw new Exception("Não existe person para esse id: " + id);
          }
          catch (Exception e)
          {
@@ -90,7 +86,7 @@ public class PersonService
 
     public void update(Person person, Integer id) throws Exception
     {
-        if(person != null && id > 0)
+        if(person != null)
         {
             final Person personFromData = getPerson(id);
 
@@ -101,6 +97,6 @@ public class PersonService
              personDao.update(person, id);
              return;
         }
-        throw new IllegalArgumentException("Parâmetro invalido(s)");
+        throw new IllegalArgumentException("Person vindo do body está nulo");
     }
 }
