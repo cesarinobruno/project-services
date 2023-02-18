@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import projectservices.project.model.Person;
 import projectservices.project.service.UserService;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,16 +34,20 @@ public class UserResource {
     {
         try
         {
-            if(userService.validatePersonByNameAndPassword(login, password, encoder) == null)
+            final Person person = new Person();
+            person.setLogin(login);
+            person.setPassword(password);
+            if(userService.validatePersonOrIfExistsInBase(person, encoder) == null)
             {
                 return new ResponseEntity<String>("Usuário não encontrado", HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<String>("Entrada permitida", HttpStatus.OK);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
-            throw new RuntimeException(e);
+            e.getCause();
         }
+        return null;
     }
 
     @GetMapping(path = API_BASE_PATH)
@@ -56,8 +59,15 @@ public class UserResource {
     @PostMapping(path = API_BASE_PATH + "/save")
     public ResponseEntity<String> save(@RequestBody Person person) throws Exception {
         person.setPassword(encoder.encode(person.getPassword()));
-        userService.save(person);
-        return ResponseEntity.ok().body("Salvo com sucesso!");
+        try
+        {
+            userService.save(person);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<String>("Login já existe!", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("Salvo com sucesso!", HttpStatus.OK);
     }
 
     @GetMapping(path = API_BASE_PATH + "/{id}")

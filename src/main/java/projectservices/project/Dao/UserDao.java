@@ -27,16 +27,16 @@ public class UserDao
     private static String PERSON_COLUMS = "(name, login, password)";
 
     public void save(Person person) throws SQLException {
-        StringBuilder sqlBuilder = new StringBuilder("INSERT INTO person " + PERSON_COLUMS).append(" VALUES (?, ?, ?)");
+        final StringBuilder sqlBuilder = new StringBuilder("INSERT INTO person " + PERSON_COLUMS).append(" VALUES (?, ?, ?)");
 
         try
         {
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlBuilder.toString());
+            final PreparedStatement preparedStatement = connection.prepareStatement(sqlBuilder.toString());
             preparedStatement.setString(1, person.getName());
             preparedStatement.setString(2, person.getLogin());
             preparedStatement.setString(3, person.getPassword());
 
-            Boolean error = preparedStatement.execute();
+            final Boolean error = preparedStatement.execute();
 
             if(!error)
             {
@@ -52,9 +52,9 @@ public class UserDao
 
     public List<Person> list()
     {
-        List<Person> personAdded = new ArrayList<>();
+        final List<Person> personAdded = new ArrayList<>();
 
-        String sql = PERSON_SQL;
+        final String sql = PERSON_SQL;
 
         try
         {
@@ -120,11 +120,11 @@ public class UserDao
         }
     }
 
-    public Person validatePersonByNameAndPasswordDAO(final String login, final String password, final PasswordEncoder encoder) throws SQLException {
-
-        final StringBuilder sqlQuery = new StringBuilder(PERSON_SQL).append(" where login = '")
-                                                                    .append(login).append("'");
-
+    public Person validatePersonByNameAndPasswordDAO(final Person person, final PasswordEncoder encoder) throws SQLException
+    {
+        final StringBuilder sqlQuery = new StringBuilder(PERSON_SQL)
+                                                         .append(" where login = '")
+                                                         .append(person.getLogin()).append("'");
         try
         {
             final PreparedStatement pdt = connection.prepareStatement(sqlQuery.toString());
@@ -133,10 +133,11 @@ public class UserDao
 
             if(rs.next())
             {
-              dbPerson = new Person(rs.getInt("id"), rs.getString("name"),
-                      rs.getString("login"), rs.getString("password"));
+              dbPerson = new Person(rs.getInt("id"),
+                                    rs.getString("name"),
+                                    rs.getString("login"), rs.getString("password"));
 
-              if(!encoder.matches(password, dbPerson.getPassword()))
+              if(!encoder.matches(person.getPassword(), dbPerson.getPassword()))
               {
                   return null;
               }
@@ -152,7 +153,7 @@ public class UserDao
 
     public Person getPersonById(Integer id)
     {
-        StringBuilder sqlBuilder = new StringBuilder(PERSON_SQL).append(" WHERE id = ").append(id);
+        final StringBuilder sqlBuilder = new StringBuilder(PERSON_SQL).append(" WHERE id = ").append(id);
         String query = sqlBuilder.toString();
 
         try
@@ -163,8 +164,9 @@ public class UserDao
 
             while (rs.next())
             {
-                person = new Person(rs.getInt("id"), rs.getString("name"),
-                        rs.getString("login"), rs.getString("password"));
+                person = new Person(rs.getInt("id"),
+                                    rs.getString("name"),
+                                    rs.getString("login"), rs.getString("password"));
             }
             return person;
         }
@@ -177,9 +179,8 @@ public class UserDao
         return null;
     }
 
-    public List<Person> listSortedByName(String sortType)
-    {
-        List<Person> list = new ArrayList<>();
+    public List<Person> listSortedByName(String sortType) throws Exception {
+        final List<Person> list = new ArrayList<>();
 
         StringBuilder sqlBuilder = new StringBuilder(PERSON_SQL + " p ORDER BY ");
 
@@ -191,11 +192,11 @@ public class UserDao
             case "name":
                 sqlBuilder.append("p.name");
                 break;
-                default:
+            default:
                 break;
         }
 
-        String personsOrdered = sqlBuilder.toString();
+        final String personsOrdered = sqlBuilder.toString();
 
         try
         {
@@ -217,10 +218,8 @@ public class UserDao
         }
         catch (SQLException e)
         {
-            e.printStackTrace();
+            throw new Exception();
         }
-
-        return null;
     }
 
     public Integer countPerson() {
@@ -244,11 +243,11 @@ public class UserDao
 
     public void update(Person person, Integer id) throws Exception
     {
-        StringBuilder sqlBuilder = new StringBuilder("UPDATE person SET name=?, login=? WHERE id = ?");
+        final StringBuilder sqlBuilder = new StringBuilder("UPDATE person SET name=?, login=? WHERE id = ?");
 
         try
         {
-            PreparedStatement statement = connection.prepareStatement(sqlBuilder.toString());
+            final PreparedStatement statement = connection.prepareStatement(sqlBuilder.toString());
             statement.setString(1, person.getName());
             statement.setString(2, person.getLogin());
             statement.setInt(3, id);
@@ -263,9 +262,9 @@ public class UserDao
             connection.rollback();
             throw new Exception("Operação não realizada");
         }
-        finally
+        catch (Exception e)
         {
-//            connection.close();
+            throw new Exception();
         }
     }
 }

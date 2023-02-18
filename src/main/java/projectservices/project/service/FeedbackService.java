@@ -10,13 +10,13 @@ import projectservices.project.model.Person;
 public class FeedbackService
 {
     @Autowired
-    PersonService personService;
+    UserService userService;
 
     FeedbackDao feedbackDao = new FeedbackDao();
 
     public void save(Feedback feedback, Integer id) throws Exception {
 
-        Person person = personService.getPerson(id);
+        Person person = userService.getPerson(id);
 
         if(person == null)
         {

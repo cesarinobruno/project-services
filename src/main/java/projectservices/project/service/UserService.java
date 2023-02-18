@@ -7,13 +7,11 @@ import projectservices.project.Dao.UserDao;
 import projectservices.project.model.Feedback;
 import projectservices.project.model.Person;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
 public class UserService
 {
-
     UserDao userDao = new UserDao();
 
     @Autowired
@@ -21,24 +19,24 @@ public class UserService
 
     public void save(Person person) throws Exception
     {
-        try
-        {
             if(person != null)
             {
-                userDao.save(person);
+                validatePersonOrIfExistsInBase(person, null);
+                this.userDao.save(person);
             }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Operação não realizada");
-        }
-     }
+    }
 
-     public Person validatePersonByNameAndPassword(final String login, final String password, final PasswordEncoder encoder) throws SQLException
+     public Person validatePersonOrIfExistsInBase(final Person person, final PasswordEncoder encoder) throws Exception
      {
-         final Person personData = userDao.validatePersonByNameAndPasswordDAO(login, password, encoder);
-         return personData;
+         //new Person
+         if(encoder == null &&
+                 this.listPerson(false, null)
+                     .stream()
+                     .anyMatch(p -> p.getLogin().equalsIgnoreCase(person.getLogin())))
+         {
+            throw new Exception("Usuário já existe na base");
+         }
+         return userDao.validatePersonByNameAndPasswordDAO(person, encoder);
      }
 
      public List<Person> listPerson(boolean orderBy, String sortType)
@@ -49,9 +47,15 @@ public class UserService
 
          if(orderBy && count > 1)
          {
-             person.setPersons(userDao.listSortedByName(sortType));
+             try
+             {
+                 person.setPersons(userDao.listSortedByName(sortType));
+             }
+             catch (Exception e)
+             {
+                e.getCause();
+             }
          }
-         //faz sentido manter os dois, pois é processamento para realizar o orderBy geralmente é maior
          else
          {
              person.setPersons(userDao.list());
@@ -59,8 +63,8 @@ public class UserService
          return person.getPersons();
      }
 
-     public Person getPerson(Integer id) {
-         //has a person 
+     public Person getPerson(Integer id)
+     {
          final Person person = userDao.getPersonById(id);
          try
          {
