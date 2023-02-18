@@ -1,18 +1,20 @@
 package projectservices.project.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import projectservices.project.Dao.PersonDao;
+import projectservices.project.Dao.UserDao;
 import projectservices.project.model.Feedback;
 import projectservices.project.model.Person;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
-public class PersonService
+public class UserService
 {
 
-    PersonDao personDao = new PersonDao();
+    UserDao userDao = new UserDao();
 
     @Autowired
     FeedbackService feedbackService;
@@ -23,7 +25,7 @@ public class PersonService
         {
             if(person != null)
             {
-                personDao.save(person);
+                userDao.save(person);
             }
         }
         catch (Exception e)
@@ -33,27 +35,33 @@ public class PersonService
         }
      }
 
+     public Person validatePersonByNameAndPassword(final String login, final String password, final PasswordEncoder encoder) throws SQLException
+     {
+         final Person personData = userDao.validatePersonByNameAndPasswordDAO(login, password, encoder);
+         return personData;
+     }
+
      public List<Person> listPerson(boolean orderBy, String sortType)
      {
          final Person person = new Person();
 
-         final Integer count = personDao.countPerson();
+         final Integer count = userDao.countPerson();
 
          if(orderBy && count > 1)
          {
-             person.setPersons(personDao.listSortedByName(sortType));
+             person.setPersons(userDao.listSortedByName(sortType));
          }
          //faz sentido manter os dois, pois é processamento para realizar o orderBy geralmente é maior
          else
          {
-             person.setPersons(personDao.list());
+             person.setPersons(userDao.list());
          }
          return person.getPersons();
      }
 
      public Person getPerson(Integer id) {
          //has a person 
-         final Person person = personDao.getPerson(id);
+         final Person person = userDao.getPersonById(id);
          try
          {
              if (person != null)
@@ -81,7 +89,7 @@ public class PersonService
        {
            feedbackAssociateFromPerson = true;
        }
-       personDao.delete(id, feedbackAssociateFromPerson);
+       userDao.delete(id, feedbackAssociateFromPerson);
     }
 
     public void update(Person person, Integer id) throws Exception
@@ -94,7 +102,7 @@ public class PersonService
             {
                throw new IllegalArgumentException("Person id não corresponde a de nenhum person do banco");
             }
-             personDao.update(person, id);
+             userDao.update(person, id);
              return;
         }
         throw new IllegalArgumentException("Person vindo do body está nulo");

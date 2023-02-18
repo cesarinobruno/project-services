@@ -1,5 +1,6 @@
 package projectservices.project.Dao;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import projectservices.project.Repository.SingleConnection;
 import projectservices.project.model.Person;
 
@@ -10,12 +11,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonDao
+public class UserDao
 {
     private Connection connection;
 
 
-    public PersonDao()
+    public UserDao()
     {
         connection = SingleConnection.getConnection();
     }
@@ -35,14 +36,16 @@ public class PersonDao
             preparedStatement.setString(2, person.getLogin());
             preparedStatement.setString(3, person.getPassword());
 
-            boolean isExecuteQuery = preparedStatement.execute();
-            if(isExecuteQuery)
+            Boolean error = preparedStatement.execute();
+
+            if(!error)
             {
                 connection.commit();
             }
         }
         catch (Exception e)
         {
+            connection.rollback();
             throw new SQLException();
         }
     }
@@ -117,7 +120,37 @@ public class PersonDao
         }
     }
 
-    public Person getPerson(Integer id)
+    public Person validatePersonByNameAndPasswordDAO(final String login, final String password, final PasswordEncoder encoder) throws SQLException {
+
+        final StringBuilder sqlQuery = new StringBuilder(PERSON_SQL).append(" where login = '")
+                                                                    .append(login).append("'");
+
+        try
+        {
+            final PreparedStatement pdt = connection.prepareStatement(sqlQuery.toString());
+            final ResultSet rs = pdt.executeQuery();
+            final Person dbPerson;
+
+            if(rs.next())
+            {
+              dbPerson = new Person(rs.getInt("id"), rs.getString("name"),
+                      rs.getString("login"), rs.getString("password"));
+
+              if(!encoder.matches(password, dbPerson.getPassword()))
+              {
+                  return null;
+              }
+              return dbPerson;
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Person getPersonById(Integer id)
     {
         StringBuilder sqlBuilder = new StringBuilder(PERSON_SQL).append(" WHERE id = ").append(id);
         String query = sqlBuilder.toString();
