@@ -117,4 +117,9 @@ public class UserService
         }
         throw new IllegalArgumentException("Person vindo do body está nulo");
     }
+
+    public int sum(int a, int b)
+    {
+        return a + b;
+    }
 }
