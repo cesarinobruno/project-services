@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 
 public class SingleConnection {
 
-    private static String url = "jdbc:mysql://localhost:3306/db_project";
+    private static String url = "jdbc:mysql://172.17.0.2:3306/db_project";
     private static String user = "root";
-    private static String password = "Info@1234";
+    private static String password = "root";
     private static Connection connection = null;
 
     static
@@ -26,7 +26,7 @@ public class SingleConnection {
         {
             if(connection == null)
             {
-                Class.forName("com.mysql.jdbc.Driver");
+                Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(url, user, password);
                 connection.setAutoCommit(false);
                 System.out.println("Conectou com sucesso");

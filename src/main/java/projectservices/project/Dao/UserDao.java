@@ -137,7 +137,7 @@ public class UserDao
                                     rs.getString("name"),
                                     rs.getString("login"), rs.getString("password"));
 
-              if(!encoder.matches(person.getPassword(), dbPerson.getPassword()))
+              if(encoder != null && !encoder.matches(person.getPassword(), dbPerson.getPassword()))
               {
                   return null;
               }

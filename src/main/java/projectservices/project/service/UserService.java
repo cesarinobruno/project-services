@@ -8,11 +8,12 @@ import projectservices.project.model.Feedback;
 import projectservices.project.model.Person;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class UserService
 {
-    UserDao userDao = new UserDao();
+    static UserDao userDao = new UserDao();
 
     @Autowired
     FeedbackService feedbackService;
@@ -28,15 +29,19 @@ public class UserService
 
      public Person validatePersonOrIfExistsInBase(final Person person, final PasswordEncoder encoder) throws Exception
      {
-         //new Person
-         if(encoder == null &&
-                 this.listPerson(false, null)
-                     .stream()
-                     .anyMatch(p -> p.getLogin().equalsIgnoreCase(person.getLogin())))
-         {
-            throw new Exception("Usuário já existe na base");
-         }
-         return userDao.validatePersonByNameAndPasswordDAO(person, encoder);
+        if(encoder == null)
+        {
+            final Stream<Person> personWithLoginInUse = this.listPerson(false, null)
+                                                            .stream()
+                                                            .filter(pDB -> pDB.getLogin().equalsIgnoreCase(person.getLogin()));
+
+            if(personWithLoginInUse != null && personWithLoginInUse.anyMatch(p -> !p.getId().equals(person.getId())))
+            {
+                throw new Exception();
+            }
+        }
+
+        return userDao.validatePersonByNameAndPasswordDAO(person, encoder);
      }
 
      public List<Person> listPerson(boolean orderBy, String sortType)
@@ -104,8 +109,9 @@ public class UserService
 
             if(personFromData == null || personFromData.getId() != person.getId())
             {
-               throw new IllegalArgumentException("Person id não corresponde a de nenhum person do banco");
+               throw new IllegalArgumentException();
             }
+             this.validatePersonOrIfExistsInBase(person, null);
              userDao.update(person, id);
              return;
         }

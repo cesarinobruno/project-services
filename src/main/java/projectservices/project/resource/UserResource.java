@@ -2,8 +2,10 @@ package projectservices.project.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.*;
 import projectservices.project.model.Person;
 import projectservices.project.service.UserService;
@@ -79,7 +81,14 @@ public class UserResource {
     @PutMapping(path = API_BASE_PATH + "/update/{id}")
     public ResponseEntity<String> update(@RequestBody Person person, @PathVariable Integer id) throws Exception
     {
-        userService.update(person, id);
+        try
+        {
+            userService.update(person, id);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<String>("Login já existe", HttpStatus.BAD_REQUEST);
+        }
         return ResponseEntity.ok().body("Atualizado com sucesso!");
     }
 
