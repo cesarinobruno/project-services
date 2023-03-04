@@ -54,7 +54,7 @@ public class UserResource {
     public ResponseEntity users(@RequestParam("orderBy") Optional<Boolean> orderBy, @RequestParam("type") Optional<String> type)
     {
         final PersonListResult personListResult = userService.listPerson(orderBy.orElse(false), type.orElse("createdOn"));
-        return ResponseEntity.ok().header("total", personListResult.getTotal().toString()).body(personListResult);
+        return ResponseEntity.ok().header("total", personListResult.getTotal().toString()).body(personListResult.getPersonList());
 
     }
 
@@ -69,7 +69,7 @@ public class UserResource {
         {
             return new ResponseEntity<String>("Login já existe!", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<String>("Salvo com sucesso.", HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path = API_BASE_PATH + "/{id}")
@@ -96,13 +96,13 @@ public class UserResource {
         {
             return new ResponseEntity<String>("Login já existe!", HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok().body("Atualizado com sucesso!");
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(path = API_BASE_PATH + "/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Integer id)
     {
         userService.delete(id);
-        return ResponseEntity.ok().body("Excluido com sucesso!");
+        return ResponseEntity.ok().build();
     }
 }
