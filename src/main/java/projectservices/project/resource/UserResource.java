@@ -2,15 +2,13 @@ package projectservices.project.resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.*;
 import projectservices.project.model.Person;
+import projectservices.project.model.PersonListResult;
 import projectservices.project.service.UserService;
 
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -29,7 +27,6 @@ public class UserResource {
         this.encoder = encoder;
     }
 
-    //como validar o enconder
     @PostMapping(path = API_BASE_PATH + "/login")
     public ResponseEntity<String> session(@RequestParam("login") final String login,
                                           @RequestParam("password") final String password)
@@ -39,6 +36,7 @@ public class UserResource {
             final Person person = new Person();
             person.setLogin(login);
             person.setPassword(password);
+
             if(userService.validatePersonOrIfExistsInBase(person, encoder) == null)
             {
                 return new ResponseEntity<String>("Usuário não encontrado", HttpStatus.BAD_REQUEST);
@@ -53,9 +51,11 @@ public class UserResource {
     }
 
     @GetMapping(path = API_BASE_PATH)
-    public List<Person> users(@RequestParam("orderBy") Optional<Boolean> orderBy, @RequestParam("type") Optional<String> type)
+    public ResponseEntity users(@RequestParam("orderBy") Optional<Boolean> orderBy, @RequestParam("type") Optional<String> type)
     {
-        return userService.listPerson(orderBy.orElse(false), type.orElse("createdOn"));
+        final PersonListResult personListResult = userService.listPerson(orderBy.orElse(false), type.orElse("createdOn"));
+        return ResponseEntity.ok().header("total", personListResult.getTotal().toString()).body(personListResult);
+
     }
 
     @PostMapping(path = API_BASE_PATH + "/save")
@@ -69,13 +69,20 @@ public class UserResource {
         {
             return new ResponseEntity<String>("Login já existe!", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<String>("Salvo com sucesso!", HttpStatus.OK);
+        return new ResponseEntity<String>("Salvo com sucesso.", HttpStatus.OK);
     }
 
     @GetMapping(path = API_BASE_PATH + "/{id}")
-    public Person users(@PathVariable Integer id)
+    public ResponseEntity users(@PathVariable Integer id) throws Exception
     {
-        return userService.getPerson(id);
+        try
+        {
+            return ResponseEntity.ok().body(userService.getPerson(id));
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(e.toString(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping(path = API_BASE_PATH + "/update/{id}")
@@ -87,7 +94,7 @@ public class UserResource {
         }
         catch (Exception e)
         {
-            return new ResponseEntity<String>("Login já existe", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Login já existe!", HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok().body("Atualizado com sucesso!");
     }

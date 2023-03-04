@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import projectservices.project.Dao.UserDao;
 import projectservices.project.model.Feedback;
 import projectservices.project.model.Person;
+import projectservices.project.model.PersonListResult;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 @Service
@@ -31,7 +31,7 @@ public class UserService
      {
         if(encoder == null)
         {
-            final Stream<Person> personWithLoginInUse = this.listPerson(false, null)
+            final Stream<Person> personWithLoginInUse = this.listPerson(false, null).getPersonList()
                                                             .stream()
                                                             .filter(pDB -> pDB.getLogin().equalsIgnoreCase(person.getLogin()));
 
@@ -44,46 +44,15 @@ public class UserService
         return userDao.validatePersonByNameAndPasswordDAO(person, encoder);
      }
 
-     public List<Person> listPerson(boolean orderBy, String sortType)
-     {
-         final Person person = new Person();
-
-         final Integer count = userDao.countPerson();
-
-         if(orderBy && count > 1)
-         {
-             try
-             {
-                 person.setPersons(userDao.listSortedByName(sortType));
-             }
-             catch (Exception e)
-             {
-                e.getCause();
-             }
-         }
-         else
-         {
-             person.setPersons(userDao.list());
-         }
-         return person.getPersons();
-     }
-
-     public Person getPerson(Integer id)
+     public Person getPerson(Integer id) throws Exception
      {
          final Person person = userDao.getPersonById(id);
-         try
+
+         if (person != null)
          {
-             if (person != null)
-             {
-                 return person;
-             }
-             throw new Exception("Não existe person para esse id: " + id);
+             return person;
          }
-         catch (Exception e)
-         {
-             e.printStackTrace();
-         }
-         return null;
+         throw new Exception("Não existe person para esse id: " + id);
     }
 
     public void delete(Integer id)
@@ -118,8 +87,27 @@ public class UserService
         throw new IllegalArgumentException("Person vindo do body está nulo");
     }
 
-    public int sum(int a, int b)
+    public PersonListResult listPerson(boolean orderBy, String sortType)
     {
-        return a + b;
+        PersonListResult personListResult = null;
+
+        final Integer total = userDao.countPerson();
+
+        if(orderBy && total > 1)
+        {
+            try
+            {
+               personListResult = new PersonListResult(userDao.listSortedByName(sortType), total);
+            }
+            catch (Exception e)
+            {
+                e.getCause();
+            }
+        }
+        else
+        {
+            personListResult = new PersonListResult(userDao.list(), total);
+        }
+        return personListResult;
     }
 }
