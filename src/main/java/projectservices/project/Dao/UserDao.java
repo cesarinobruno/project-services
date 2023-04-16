@@ -135,7 +135,8 @@ public class UserDao
             {
               dbPerson = new Person(rs.getInt("id"),
                                     rs.getString("name"),
-                                    rs.getString("login"), rs.getString("password"));
+                                    rs.getString("login"),
+                                    rs.getString("password"));
 
               if(encoder != null && !encoder.matches(person.getPassword(), dbPerson.getPassword()))
               {

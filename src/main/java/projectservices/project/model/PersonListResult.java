@@ -10,11 +10,11 @@ public class PersonListResult
 
     public PersonListResult() {}
 
-    public PersonListResult(List<Person> personList, Integer total) { this.personList = personList; this.total = total; }
+    public PersonListResult(final List<Person> personList, final Integer total) { this.personList = personList; this.total = total; }
 
     public List<Person> getPersonList() { return personList; }
 
-    public void setPersonList(List<Person> personList) { this.personList = personList; }
+    public void setPersonList(final List<Person> personList) { this.personList = personList; }
 
     public Integer getTotal() { return total; }
 

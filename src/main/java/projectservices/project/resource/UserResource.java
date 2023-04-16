@@ -59,7 +59,8 @@ public class UserResource {
     }
 
     @PostMapping(path = API_BASE_PATH + "/save")
-    public ResponseEntity<String> save(@RequestBody Person person) throws Exception {
+    public ResponseEntity<String> save(@RequestBody Person person) throws Exception
+    {
         person.setPassword(encoder.encode(person.getPassword()));
         try
         {
@@ -73,7 +74,7 @@ public class UserResource {
     }
 
     @GetMapping(path = API_BASE_PATH + "/{id}")
-    public ResponseEntity users(@PathVariable Integer id) throws Exception
+    public ResponseEntity user(@PathVariable Integer id) throws Exception
     {
         try
         {
@@ -94,7 +95,7 @@ public class UserResource {
         }
         catch (Exception e)
         {
-            return new ResponseEntity<String>("Login já existe!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.toString(), HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok().build();
     }

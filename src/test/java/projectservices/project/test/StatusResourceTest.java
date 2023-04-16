@@ -1,4 +1,4 @@
-package test;
+package projectservices.project.test;
 
 
 import org.junit.jupiter.api.Assertions;
