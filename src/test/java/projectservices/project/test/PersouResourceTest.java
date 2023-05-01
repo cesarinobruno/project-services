@@ -2,12 +2,16 @@ package projectservices.project.test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import projectservices.project.Repository.SingleConnection;
@@ -108,23 +112,23 @@ public class PersouResourceTest
         Assertions.assertEquals(6, person3.getId());
     }
 
-//    WIP
-//    @Test
-//    public void saveSuccessTest() throws Exception
-//    {
-//        Person person = new Person();
-//        person.setName("Carvalho carvalho");
-//        person.setLogin("carvalho.login");
-//        person.setPassword("carvalho.password");
-//
-//        ObjectMapper mapper = this.getMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-//        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-//        String requestJson = ow.writeValueAsString(person);
-//
-//
-//        final MvcResult result = this.mockMvc.perform(post("/api/save").contentType(MediaType.APPLICATION_JSON)
-//                .content(requestJson)).andReturn();
-//        int actualResult = result.getResponse().getStatus();
-//        Assertions.assertEquals(actualResult, HttpStatus.OK.value());
-//    }
+    @Test
+    public void saveSuccessTest() throws Exception
+    {
+        Person person = new Person();
+        person.setName("Carvalho carvalho");
+        person.setLogin("carvalho.login");
+        person.setPassword("carvalho.password");
+
+        ObjectMapper mapper = this.getMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(person);
+
+        final MvcResult result = this.mockMvc.perform(post("/api/users/save")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson)).andReturn();
+
+        int status = result.getResponse().getStatus();
+        Assertions.assertEquals(status, HttpStatus.OK.value());
+    }
 }
