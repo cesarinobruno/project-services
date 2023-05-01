@@ -1,9 +1,11 @@
 package projectservices.project.test;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,8 +27,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @SpringBootTest
@@ -113,6 +114,8 @@ public class PersouResourceTest
     }
 
     @Test
+    @JsonIgnore
+    //vai precisar de um banco de dados só para rodar os testes
     public void saveSuccessTest() throws Exception
     {
         Person person = new Person();
@@ -130,5 +133,13 @@ public class PersouResourceTest
 
         int status = result.getResponse().getStatus();
         Assertions.assertEquals(status, HttpStatus.OK.value());
+    }
+    @Test
+    public void getUserSuccessTest() throws Exception
+    {
+        this.mockMvc.perform(get("/api/users/")
+                    .param("id", "5"))
+                    .andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[1].name", Matchers.equalTo("Silvio Santos")));
+
     }
 }
