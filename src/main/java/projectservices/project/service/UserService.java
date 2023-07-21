@@ -37,7 +37,7 @@ public class UserService
 
             if(personWithLoginInUse != null && personWithLoginInUse.anyMatch(p -> !p.getId().equals(person.getId())))
             {
-                throw new Exception();
+                throw new IllegalArgumentException("login já existe");
             }
         }
 
@@ -55,19 +55,21 @@ public class UserService
          throw new Exception("Não existe person para esse id: " + id);
     }
 
-    public void delete(Integer id)
+    public void delete(Integer id) throws Exception
     {
+       final Person person = getPerson(id);
+
        final Feedback feedback = new Feedback();
 
        boolean feedbackAssociateFromPerson = false;
 
-       feedbackService.getFeedback(id, feedback);
+       feedbackService.getFeedback(person.getId(), feedback);
 
-       if(id.equals(feedback.getPersonId()))
+       if(person.getId().equals(feedback.getPersonId()))
        {
            feedbackAssociateFromPerson = true;
        }
-       userDao.delete(id, feedbackAssociateFromPerson);
+       userDao.delete(person.getId(), feedbackAssociateFromPerson);
     }
 
     public void update(Person person, Integer id) throws Exception

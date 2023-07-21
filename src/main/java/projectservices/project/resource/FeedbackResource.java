@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import projectservices.project.model.Feedback;
 import projectservices.project.service.FeedbackService;
 
+import java.sql.SQLException;
+import java.util.List;
+
 @CrossOrigin(origins = "*")
 @RestController
 public class FeedbackResource
@@ -25,5 +28,10 @@ public class FeedbackResource
             return new ResponseEntity(e.toString(), HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok().build();
+    }
+    @GetMapping(path="/api/feedbacks")
+    public List<Feedback> feedback() throws SQLException 
+    {
+        return feedbackService.list();
     }
 }

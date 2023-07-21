@@ -6,6 +6,9 @@ import projectservices.project.Dao.FeedbackDao;
 import projectservices.project.model.Feedback;
 import projectservices.project.model.Person;
 
+import java.sql.SQLException;
+import java.util.List;
+
 @Controller
 public class FeedbackService
 {
@@ -35,5 +38,10 @@ public class FeedbackService
     public void getFeedback(Integer personId, Feedback feedback)
     {
         feedbackDao.checkForFeedbackFromUser(personId, feedback);
+    }
+
+    public List<Feedback> list() throws SQLException
+    {
+        return feedbackDao.feedbackList();
     }
 }

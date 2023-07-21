@@ -27,16 +27,11 @@ public class UserResource {
         this.encoder = encoder;
     }
 
-    @PostMapping(path = API_BASE_PATH + "/login")
-    public ResponseEntity<String> session(@RequestParam("login") final String login,
-                                          @RequestParam("password") final String password)
+    @GetMapping(path = API_BASE_PATH + "/session")
+    public ResponseEntity<String> session(@RequestBody final Person person)
     {
         try
         {
-            final Person person = new Person();
-            person.setLogin(login);
-            person.setPassword(password);
-
             if(userService.validatePersonOrIfExistsInBase(person, encoder) == null)
             {
                 return new ResponseEntity<String>("Usuário não encontrado", HttpStatus.BAD_REQUEST);
@@ -101,8 +96,7 @@ public class UserResource {
     }
 
     @DeleteMapping(path = API_BASE_PATH + "/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Integer id)
-    {
+    public ResponseEntity<String> delete(@PathVariable("id") Integer id) throws Exception {
         userService.delete(id);
         return ResponseEntity.ok().build();
     }

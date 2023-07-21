@@ -2,11 +2,14 @@ package projectservices.project.Dao;
 
 import projectservices.project.Repository.SingleConnection;
 import projectservices.project.model.Feedback;
+import projectservices.project.model.Person;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FeedbackDao
 {
@@ -20,6 +23,24 @@ public class FeedbackDao
         connection = SingleConnection.getConnection();
     }
 
+    public List<Feedback> feedbackList() throws SQLException
+    {
+        final List<Feedback> feedbackListResult = new ArrayList<>();
+        final StringBuilder sqlBuilder = new StringBuilder(FEEDBACK_SQL);
+        PreparedStatement statement = connection.prepareStatement(sqlBuilder.toString());
+        ResultSet rs = statement.executeQuery();
+
+        while (rs.next())
+        {
+            Feedback feedback = new Feedback();
+            feedback.setId(rs.getInt("id"));
+            feedback.setMessage(rs.getString("message"));
+            feedback.setPersonId(rs.getInt("personId"));
+
+            feedbackListResult.add(feedback);
+        }
+         return feedbackListResult;
+    }
     public void checkForFeedbackFromUser(final Integer personId, final Feedback feedback)
     {
         StringBuilder sqlBuilder = new StringBuilder(FEEDBACK_SQL + " WHERE fd.personId = ").append(personId);
