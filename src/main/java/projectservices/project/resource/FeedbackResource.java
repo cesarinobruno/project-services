@@ -30,8 +30,8 @@ public class FeedbackResource
         return ResponseEntity.ok().build();
     }
     @GetMapping(path="/api/feedbacks")
-    public List<Feedback> feedback() throws SQLException 
+    public ResponseEntity feedback() throws SQLException
     {
-        return feedbackService.list();
+        return ResponseEntity.ok(feedbackService.list());
     }
 }
