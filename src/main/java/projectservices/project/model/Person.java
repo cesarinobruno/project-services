@@ -11,7 +11,7 @@ public class Person {
     private String name;
 
     private String login;
-
+    @JsonIgnore
     private String password;
 
     @JsonIgnore

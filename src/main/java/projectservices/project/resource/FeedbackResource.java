@@ -20,8 +20,9 @@ public class FeedbackResource
     @PostMapping(path = "/api/feedbacks/{personId}/save")
     public ResponseEntity<String> newPost(@RequestBody Feedback feedback, @PathVariable("personId") Integer personId) throws Exception
     {
-        try {
-            feedbackService.save(feedback, personId);
+        try
+        {
+            this.feedbackService.save(feedback, personId);
         }
         catch (Exception e)
         {

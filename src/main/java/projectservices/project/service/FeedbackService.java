@@ -17,9 +17,9 @@ public class FeedbackService
 
     FeedbackDao feedbackDao = new FeedbackDao();
 
-    public void save(Feedback feedback, Integer id) throws Exception {
-
-        Person person = userService.getPerson(id);
+    public void save(Feedback feedback, Integer id) throws Exception
+    {
+        final Person person = userService.getPerson(id);
 
         if(person == null)
         {

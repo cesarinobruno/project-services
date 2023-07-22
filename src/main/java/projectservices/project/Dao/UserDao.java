@@ -15,7 +15,6 @@ public class UserDao
 {
     private Connection connection;
 
-
     public UserDao()
     {
         connection = SingleConnection.getConnection();
@@ -26,7 +25,8 @@ public class UserDao
     private static String FEEDBACK_FROM_SQL = "FROM feedback";
     private static String PERSON_COLUMS = "(name, login, password)";
 
-    public void save(Person person) throws SQLException {
+    public void save(Person person) throws SQLException
+    {
         final StringBuilder sqlBuilder = new StringBuilder("INSERT INTO person " + PERSON_COLUMS).append(" VALUES (?, ?, ?)");
 
         try
@@ -97,7 +97,9 @@ public class UserDao
                 PreparedStatement preparedStatement = connection.prepareStatement(deleteFeedbackQuery);
                 preparedStatement.execute();
                 connection.commit();
-            } catch (SQLException e) {
+            }
+            catch (SQLException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -180,7 +182,8 @@ public class UserDao
         return null;
     }
 
-    public List<Person> listSortedByName(String sortType) throws Exception {
+    public List<Person> listSortedByName(String sortType) throws Exception
+    {
         final List<Person> list = new ArrayList<>();
 
         StringBuilder sqlBuilder = new StringBuilder(PERSON_SQL + " p ORDER BY ");
@@ -223,10 +226,12 @@ public class UserDao
         }
     }
 
-    public Integer countPerson() {
+    public Integer countPerson()
+    {
         String sqlBuilder = new StringBuilder("SELECT COUNT(id) as qtd ").append(PERSON_FROM_SQL).toString();
 
-        try {
+        try
+        {
             PreparedStatement statement = connection.prepareStatement(sqlBuilder);
             ResultSet rs = statement.executeQuery();
 
