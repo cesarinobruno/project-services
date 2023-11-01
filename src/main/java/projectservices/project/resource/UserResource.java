@@ -96,8 +96,16 @@ public class UserResource {
     }
 
     @DeleteMapping(path = API_BASE_PATH + "/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Integer id) throws Exception {
-        userService.delete(id);
+    public ResponseEntity<String> delete(@PathVariable("id") Integer id)
+    {
+        try
+        {
+            userService.delete(id);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<String>(e.toString(), HttpStatus.NOT_FOUND);
+        }
         return ResponseEntity.ok().build();
     }
 }

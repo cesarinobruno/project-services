@@ -52,7 +52,7 @@ public class UserService
          {
              return person;
          }
-         throw new Exception("Não existe person para esse id: " + id);
+        return null;
     }
 
     public void delete(Integer id) throws Exception
@@ -61,17 +61,22 @@ public class UserService
 
        final Feedback feedback = new Feedback();
 
-       boolean feedbackAssociateFromPerson = false;
-
-       feedbackService.getFeedback(person.getId(), feedback);
-
-       if(person.getId().equals(feedback.getPersonId()))
+       if(person == null)
        {
-           feedbackAssociateFromPerson = true;
+           throw new Exception("personId fornecido: " + id + " não corresponde a nenhum person");
        }
-       userDao.delete(person.getId(), feedbackAssociateFromPerson);
-    }
+       else
+       {
+         feedbackService.getFeedback(person.getId(), feedback);
 
+         if(person.getId().equals(feedback.getPersonId()))
+           {
+             userDao.delete(person.getId(), true);
+             return;
+           }
+            userDao.delete(person.getId(), false);
+       }
+    }
     public void update(Person person, Integer id) throws Exception
     {
         if(person != null)
