@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 
 public class SingleConnection {
 
-    private static String url = "jdbc:mysql://172.17.0.2:3306/db_project";
+    private static String url = "jdbc:mysql://172.17.0.2:3306/user";
     private static String user = "root";
     private static String password = "root";
     private static Connection connection = null;

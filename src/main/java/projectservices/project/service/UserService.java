@@ -44,18 +44,18 @@ public class UserService
         return userDao.validatePersonByNameAndPasswordDAO(person, encoder);
      }
 
-     public Person getPerson(Integer id) throws Exception
+     public Person getPerson(Integer id)
      {
          final Person person = userDao.getPersonById(id);
 
-         if (person != null)
+         if (person == null)
          {
-             return person;
+             throw new RuntimeException("personId fornecido: " + id + " não corresponde a nenhum person");
          }
-        return null;
+        return person;
     }
 
-    public void delete(Integer id) throws Exception
+    public void delete(Integer id)
     {
        final Person person = getPerson(id);
 
@@ -63,7 +63,7 @@ public class UserService
 
        if(person == null)
        {
-           throw new Exception("personId fornecido: " + id + " não corresponde a nenhum person");
+           throw new RuntimeException("personId fornecido: " + id + " não corresponde a nenhum person");
        }
        else
        {
